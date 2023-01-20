@@ -24,9 +24,10 @@ from helper.list_util import flatten
 from matches_crawl import MatchesCrawl
 from match_crawl import MatchCrawl
 
+year = 2017
 #save team_link of champion league 2016-2017
 '''
-team_links = TeamLinkCrawl(2017).get_team_link_array()
+team_links = TeamLinkCrawl(year).get_team_link_array()
 TeamLinkRepo().save_team_links(team_links)
 '''
 
@@ -108,7 +109,6 @@ for match_info in MatchesCrawl(2017).get_match_infos():
 
 #Save match
 # '''
-year = 2017
 
 match_infos = MatchesCrawl(year).get_match_infos()
 for match_info in match_infos:
@@ -155,7 +155,7 @@ for match_info in match_infos:
         if score_info['assist_name'] != None:
             assist= PlayerRepo().select_player_by_name(score_info['assist_name'])
             if assist == None:
-                player_sum_crawler = PlayerSumCrawl(2017,score_info['assist_sum_url'])
+                player_sum_crawler = PlayerSumCrawl(year,score_info['assist_sum_url'])
                 player_sum = player_sum_crawler.get_info()
                 stmt  = insert(Player).values(
                     age= player_sum['age'],
