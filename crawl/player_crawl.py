@@ -4,8 +4,9 @@ from helper.date_util import *
 
 class PlayerCrawl:
 
-    def __init__(self,squad_url=''):
+    def __init__(self,league_year,squad_url=''):
         self.squad_url = squad_url 
+        self.league_year = league_year
     
     def get_squad_soup(self):
         self.squad_soup = SquadSoup(self.squad_url)
@@ -34,7 +35,7 @@ class PlayerCrawl:
         try:
             birthday = self.squad_soup.get_info_table()[idx].select('td:nth-of-type(6)')[0].text.strip()
             year = get_year(birthday)
-            return 2017 - int(year)
+            return self.league_year - int(year)
         except: 
             print(traceback.format_exc())
             return None
