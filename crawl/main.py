@@ -24,13 +24,14 @@ from helper.list_util import flatten
 from matches_crawl import MatchesCrawl
 from match_crawl import MatchCrawl
 
-#save team_link of champion league 2016-2017
+year = 2017
+#save team_link of champion league (year-1)-year
 '''
-team_links = TeamLinkCrawl(2017).get_team_link_array()
+team_links = TeamLinkCrawl(year).get_team_link_array()
 TeamLinkRepo().save_team_links(team_links)
 '''
 
-# Save teams of champion league 2016-2017
+# Save teams of champion league (year-1)-year
 '''
 teams = []
 teamlinks = TeamLinkRepo().select_all_team_links()
@@ -49,7 +50,7 @@ for row in teamlinks:
 TeamRepo().save_teams(teams)
 '''
 
-#Save stadiums of champion league 2016-2017  
+#Save stadiums of champion league (year-1)-year 
 '''
 teams_and_urls = BaseRepo().query(select(Team,TeamLink).join(TeamLink,Team.team_name == TeamLink.team_name))
 stadiums = []
@@ -66,14 +67,14 @@ StadiumRepo().save_stadiums(stadiums)
 '''
 
 #Save players
-'''
+# '''
 teams_and_urls = BaseRepo().query(select(Team,TeamLink).join(TeamLink,Team.team_name == TeamLink.team_name))
 positions = positions_team()
 for row in teams_and_urls:
     players = []
     squad_url = row.TeamLink.squad_url
-    player_crawler = PlayerCrawl(squad_url).get_squad_soup()
-    player_list = flatten([PlayerCrawl(squad_url).get_squad_soup().get_players(position) for position in sorted(positions)])
+    player_crawler = PlayerCrawl(year,squad_url).get_squad_soup()
+    player_list = flatten([PlayerCrawl(year,squad_url).get_squad_soup().get_players(position) for position in sorted(positions)])
     for player_map in player_list:
         player = Player(
             age= player_map['age'],
@@ -86,13 +87,13 @@ for row in teams_and_urls:
         players.append(player)
     PlayerRepo().save_players(players)
 
-'''
+# '''
 
 #Save matches,results,scores
 
 #Save match stadium
 '''
-for match_info in MatchesCrawl(2017).get_match_infos():
+for match_info in MatchesCrawl(year).get_match_infos():
     match_crawler = MatchCrawl(match_info)
     match_stadium = match_crawler.get_stadium_match()
     saved_stadiums = StadiumRepo().select_stadium_by_name(match_stadium['stadium_match_name'])
@@ -108,7 +109,6 @@ for match_info in MatchesCrawl(2017).get_match_infos():
 
 #Save match
 # '''
-year = 2017
 
 match_infos = MatchesCrawl(year).get_match_infos()
 for match_info in match_infos:
@@ -155,7 +155,7 @@ for match_info in match_infos:
         if score_info['assist_name'] != None:
             assist= PlayerRepo().select_player_by_name(score_info['assist_name'])
             if assist == None:
-                player_sum_crawler = PlayerSumCrawl(2017,score_info['assist_sum_url'])
+                player_sum_crawler = PlayerSumCrawl(year,score_info['assist_sum_url'])
                 player_sum = player_sum_crawler.get_info()
                 stmt  = insert(Player).values(
                     age= player_sum['age'],
