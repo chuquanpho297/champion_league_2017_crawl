@@ -73,8 +73,8 @@ positions = positions_team()
 for row in teams_and_urls:
     players = []
     squad_url = row.TeamLink.squad_url
-    player_crawler = PlayerCrawl(squad_url).get_squad_soup()
-    player_list = flatten([PlayerCrawl(squad_url).get_squad_soup().get_players(position) for position in sorted(positions)])
+    player_crawler = PlayerCrawl(year,squad_url).get_squad_soup()
+    player_list = flatten([PlayerCrawl(year,squad_url).get_squad_soup().get_players(position) for position in sorted(positions)])
     for player_map in player_list:
         player = Player(
             age= player_map['age'],
