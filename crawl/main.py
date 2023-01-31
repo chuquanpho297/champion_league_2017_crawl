@@ -67,7 +67,7 @@ StadiumRepo().save_stadiums(stadiums)
 '''
 
 #Save players
-# '''
+'''
 teams_and_urls = BaseRepo().query(select(Team,TeamLink).join(TeamLink,Team.team_name == TeamLink.team_name))
 positions = positions_team()
 for row in teams_and_urls:
@@ -87,7 +87,7 @@ for row in teams_and_urls:
         players.append(player)
     PlayerRepo().save_players(players)
 
-# '''
+'''
 
 #Save matches,results,scores
 
@@ -108,7 +108,7 @@ for match_info in MatchesCrawl(year).get_match_infos():
 '''
 
 #Save match
-# '''
+'''
 
 match_infos = MatchesCrawl(year).get_match_infos()
 for match_info in match_infos:
@@ -183,4 +183,4 @@ for match_info in match_infos:
             # print('assist none')
             BaseRepo().insert(stmt)
         
-# '''
+'''
